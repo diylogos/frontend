@@ -1,0 +1,38 @@
+# Parallax
+
+## Some general tips
+
+- Use large, horizontally oritened images that can have content clipped off at the top and bottom.
+- Expect to spend considerable time to make the effect work performantly on mobile.
+- If using a CSS only solution, build the solution into the app from the ground up.
+- Pay close attention to your organization in CSS rules, as things can get complicated quickly.
+
+
+## With JS library, skrollr
+The library skrollr allows you to create generic events and animation based on scrolling events. It isn't specifically for parallax but works well with it.
+
+```js
+  if(!(/Android|iPhone|iPad|iPod|MSIE 9.0|Windows Phone/i).test(
+      navigator.userAgent || navigator.vendor || window.opera)) {
+    skrollrLocal = skrollr.init({
+      smoothScrolling: false,
+      forceHeight: false
+    });
+```
+
+This code checks to only enable scroller if not on a phone and initializes it with certain options. We found that `smoothScrolling` often made the animations feel choppy, so we turned off the effect. The `forceHeight` option ensures the document is high enough to fit all frames, so will make the document larger.
+
+We also had to refresh skroller after a certain amount of time after page load due to a sticky nav modifying the element heights. This was a quick hack to fix this, but I wouldn't generally recommend it
+
+```js
+    window._skrollr = skrollrLocal;
+    // After refresh skrollr to recalculate positioning 
+    // that get changes with sticky nav (I think).
+    setTimeout(function() {
+      window._skrollr.refresh(panels);
+    }, 500);
+```
+
+***source: [github.com/18F/letgirlslearn/blob/master/src/js/letgirlslearn.js](https://github.com/18F/letgirlslearn/blob/master/src/js/letgirlslearn.js)***
+
+## CSS
