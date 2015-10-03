@@ -5,6 +5,7 @@
 - Use large, horizontally oritened images that can have content clipped off at the top and bottom.
 - Expect to spend considerable time to make the effect work performantly on mobile.
 - If using a CSS only solution, build the solution into the app from the ground up.
+- Ensure to only animate performance concious CSS properties, such as translate3d.
 - Pay close attention to your organization in CSS rules, as things can get complicated quickly.
 
 
@@ -31,6 +32,33 @@ We also had to refresh skroller after a certain amount of time after page load d
     setTimeout(function() {
       window._skrollr.refresh(panels);
     }, 500);
+```
+
+Once Skrollr is initialized, using it requires setting data attributes based on when and what CSS effect to fire.
+
+```js
+data-bottom-top="transform:translate3d(-50%, 100%, 0px)"
+data-top-bottom="transform:translate3d(-50%, 15%, 0px)"
+```
+
+This code ensures the animation will begin with a translate x of 15% when the bottom of the window is at the top element and will end at 100% translate x when the top of the window is at the bottom of the element. It's also possible to use a different element to determine the triggers for the animation.
+
+```js
+data-anchor-target="#js-navBarSibling + .wrap"
+```
+
+This code sets the bottom/top attributes so it's based on the selector set in `anchor target`.
+
+With this functionality, Skrollr can be used to move background images in their container as you scroll. Because the scrolling effect uses a translate3d property to move itself, it can't just be a simple div with a background image with background position changing. Instead
+
+```html
+<div> // Container
+  <div></div> // White background with content
+  <div>  // Placeholder for parallax images
+  </div>
+</div>
+<div> // Parallax background
+</div>
 ```
 
 ***source: [github.com/18F/letgirlslearn/blob/master/src/js/letgirlslearn.js](https://github.com/18F/letgirlslearn/blob/master/src/js/letgirlslearn.js)***
